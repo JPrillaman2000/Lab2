@@ -92,6 +92,7 @@ public class ReadAndWrite {
             String title = x.getprimaryTitle();
             titleWriter.write(title + "\n");
         }
+        titleWriter.close();
 
         //creates the filewriter
         FileWriter moviesAgeWriter = new FileWriter("src/Movies2005-2020.txt");
@@ -110,6 +111,7 @@ public class ReadAndWrite {
                 break;
             }
         }
+        moviesAgeWriter.close();
 
         //creates the filewriter
         FileWriter documentaryWriter = new FileWriter("src/Documentary.txt");
@@ -120,6 +122,7 @@ public class ReadAndWrite {
                 documentaryWriter.write(x.dump() + "\n");
             }
         }
+        documentaryWriter.close();
 
         //creates the filewriter
         FileWriter titleYearWriter = new FileWriter("src/Title-Year.txt");
