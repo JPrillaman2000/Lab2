@@ -73,15 +73,51 @@ public class ReadAndWrite {
         //sets the variables within the object for each row of data that exists
         while(input.hasNext()){
             String id = input.next();
+            if(id.contains("/n")){
+                id = "NA";
+            }
             String titleType = input.next();
+            if(titleType.contains("/n")){
+                titleType = "NA";
+            }
             String primaryTitle = input.next();
+            if(primaryTitle.contains("/n")){
+                primaryTitle = "NA";
+            }
             String originalTitle = input.next();
+            if(originalTitle.contains("/n")){
+                originalTitle = "NA";
+            }
             String startYear = input.next();
+            if(startYear.contains("/n")){
+                startYear = "0";
+            }
             String runtime = input.next();
+            if(runtime.contains("/n")){
+                runtime = "0";
+            }
             String genre = input.nextLine();
+            if(genre.contains("/n")){
+                genre = "NA";
+            }
+
+            //converts all of the input data to lowercase
+            id = id.toLowerCase();
+            titleType = titleType.toLowerCase();
+            primaryTitle = primaryTitle.toLowerCase();
+            originalTitle = originalTitle.toLowerCase();
+            genre = genre.toLowerCase();
+
+            //converts the genre(s) to an arraylist
+            ArrayList<String> genreArrayList = new ArrayList<String>();
+            String[] genreArray = genre.split(" ");
+            genreArrayList.addAll(Arrays.asList(genreArray));
+
+            //adds the arraylist object and corresponding title to the Genre class
+            Genre y = new Genre(primaryTitle,genreArrayList);
 
             //creates the object and adds it to the arraylist
-            Movie x = new Movie(id,titleType,primaryTitle,originalTitle,startYear,runtime,genre);
+            Movie x = new Movie(id,titleType,primaryTitle,originalTitle,startYear,runtime,genreArrayList);
             moviesList.add(x);
         }
 
@@ -104,7 +140,7 @@ public class ReadAndWrite {
                 int year = Integer.parseInt(x.getstartYear());
                 //if the year is between 2005 and 2020, all the info is dumped
                 if(year >= 2005 && year <= 2020){
-                    moviesAgeWriter.write(x.dump() + "\n");
+                    moviesAgeWriter.write(x.toString() + "\n");
                 }
             }
             catch(Exception e){
@@ -119,7 +155,7 @@ public class ReadAndWrite {
         for(Movie x : moviesList){
             //if the movie is a documentary, the info is dumped
             if(x.getgenre().contains("Documentary")){
-                documentaryWriter.write(x.dump() + "\n");
+                documentaryWriter.write(x.toString() + "\n");
             }
         }
         documentaryWriter.close();
@@ -132,6 +168,15 @@ public class ReadAndWrite {
             String year = x.getstartYear();
             titleYearWriter.write(title + ", " + year + "\n");
         }
+        titleYearWriter.close();
+
+        FileWriter sortedWriter = new FileWriter("src/Sorted-Movies.txt");
+        Collections.sort(moviesList, Movie.compareAge);
+        for(Movie x : moviesList){
+            sortedWriter.write(x.toString());
+        }
+        sortedWriter.close();
+
 
         //prints out a completion message showing that the code has run effectively
         System.out.println("Your Requested files have been created and are available within the src folder");
